@@ -7,7 +7,7 @@ class Action
 {
 public:
 	Action()= default;
-	virtual ~Action();
+	virtual ~Action() = default;
 
 	virtual void Execute() = 0;
 	

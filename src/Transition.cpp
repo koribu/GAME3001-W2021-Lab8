@@ -3,8 +3,9 @@
 
 Transition::Transition(Condition* condition, State* target_state)
 {
-	setTargetState(target_state);
 	setCondition(condition);
+	setTargetState(target_state);
+
 }
 
 Transition::~Transition()
@@ -15,10 +16,6 @@ void Transition::setTargetState(State* state)
 	m_targetState = state;
 }
 
-bool Transition::isTriggered() const
-{
-	return m_isTriggered;
-}
 
 Condition* Transition::GetCondition() const
 {
@@ -30,10 +27,6 @@ State* Transition::getTargetState() const
 	return m_targetState;
 }
 
-void Transition::setIsTriggered(bool state)
-{
-	m_isTriggered = state;
-}
 
 void Transition::setCondition(Condition* condition)
 {

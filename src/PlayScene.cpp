@@ -3,9 +3,14 @@
 #include "EventManager.h"
 
 // required for IMGUI
+#include "Attack.h"
 #include "imgui.h"
 #include "imgui_sdl.h"
+#include "MoveToLOS.h"
+#include "MoveToPlayer.h"
+#include "Patrol.h"
 #include "Renderer.h"
+#include "Transition.h"
 #include "Util.h"
 
 PlayScene::PlayScene()
@@ -33,6 +38,11 @@ void PlayScene::update()
 	updateDisplayList();
 
 	m_CheckShipLOS(m_pTarget);
+
+	m_pHasLOSCondition->SetCondition(m_pShip->hasLOS());
+
+	m_stateMachine->Update();
+
 }
 
 void PlayScene::clean()
@@ -104,7 +114,8 @@ void PlayScene::start()
 	m_pTarget->getTransform()->position = glm::vec2(600.0f, 300.0f);
 	addChild(m_pTarget);
 
-
+	//test StateMachine
+	m_buildStateMachine();
 
 }
 
@@ -136,9 +147,9 @@ void PlayScene::GUI_Function()
 		m_pShip->getTransform()->position.x = shipPosition[0];
 		m_pShip->getTransform()->position.y = shipPosition[1];
 
-		std::cout << "------------------------" << std::endl;
-		std::cout << decisionTree->MakeDecision() << std::endl;
-		std::cout << "------------------------\n" << std::endl;
+		//std::cout << "------------------------" << std::endl;
+		//std::cout << decisionTree->MakeDecision() << std::endl;
+		//std::cout << "------------------------\n" << std::endl;
 	}
 	
 	static int targetPosition[] = { m_pTarget->getTransform()->position.x, m_pTarget->getTransform()->position.y };
@@ -200,4 +211,54 @@ void PlayScene::m_CheckShipLOS(DisplayObject* target_object)
 
 		m_pShip->setHasLOS(hasLOS);
 	}
+}
+
+void PlayScene::m_buildStateMachine()
+{
+	// define conditions
+	m_pHasLOSCondition = new Condition;
+	m_pIsWithinDetectionRadiusCondition = new Condition();
+	m_pIsWithinCombatRangeCondition = new FloatCondition(0.0f, 2.0f);
+
+	// define state
+	State* patrolState = new State();
+	State* moveToPlayerState = new State();
+	State* moveToLOSState = new State();
+	State* attackState = new State();
+
+	//define Transitions
+	Transition* moveToPlayerTransition = new Transition(m_pHasLOSCondition, moveToPlayerState);
+	Transition* moveToLOSTransition = new Transition(m_pIsWithinDetectionRadiusCondition, moveToLOSState);
+	Transition* attackTransition = new Transition(m_pIsWithinCombatRangeCondition, attackState);
+
+	// Actions
+	Patrol* patrolAction = new Patrol();
+	MoveToLOS* moveToLOSAction = new MoveToLOS();
+	MoveToPlayer* moveToPlayerAction = new MoveToPlayer();
+	Attack* attackAction = new Attack();
+
+	//setup Patrol State
+	patrolState->AddTransition(moveToPlayerTransition);
+	patrolState->AddTransition(moveToLOSTransition);
+	patrolState->SetAction(patrolAction);
+
+	//setup MoveToPlayer State
+	moveToPlayerState->AddTransition(attackTransition);
+	moveToPlayerState->AddTransition(moveToLOSTransition);
+	moveToPlayerState->SetAction(moveToPlayerAction);
+
+	//setup movetoLOS state
+	moveToLOSState->AddTransition(moveToPlayerTransition);
+	moveToLOSState->SetAction(moveToLOSAction);
+
+	// setup Attack State
+	attackState->AddTransition(moveToPlayerTransition);
+	attackState->AddTransition(moveToLOSTransition);
+	attackState->SetAction(attackAction);
+
+
+	m_stateMachine = new StateMachine();
+	m_stateMachine->setCurrentState(patrolState);
+
+
 }

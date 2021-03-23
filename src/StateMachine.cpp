@@ -1,5 +1,7 @@
 #include  "StateMachine.h"
 
+#include "Transition.h"
+
 StateMachine::StateMachine()
 = default;
 
@@ -23,7 +25,7 @@ void StateMachine::Update()
 
 	for (auto transition : getCurrentState()->getTransition())
 	{
-		if(transition->isTriggered())
+		if(transition->GetCondition()->Test())
 		{
 			triggeredTransition = transition;
 			break;

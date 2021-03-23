@@ -5,10 +5,12 @@
 #include "Scene.h"
 #include "Button.h"
 #include "DecisionTree.h"
+#include "FloatCondition.h"
 #include "Label.h"
 #include "Obstacle.h"
 #include "ship.h"
 #include "SpaceShip.h"
+#include "StateMachine.h"
 #include "Target.h"
 
 class PlayScene : public Scene
@@ -40,6 +42,14 @@ private:
 	Obstacle* m_pObstacle3;
 	void m_CheckShipLOS(DisplayObject* object);
 
+	//State Machine properties
+
+	Condition* m_pHasLOSCondition;
+	Condition* m_pIsWithinDetectionRadiusCondition;
+	FloatCondition* m_pIsWithinCombatRangeCondition;
+	
+	StateMachine* m_stateMachine;
+	void m_buildStateMachine();
 };
 
 
