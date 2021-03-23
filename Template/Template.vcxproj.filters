@@ -58,6 +58,9 @@
     <Filter Include="StateMachine\Actions">
       <UniqueIdentifier>{9ecb4fd6-f34f-4677-a9bc-41fc53dc71b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="StateMachine\Conditions">
+      <UniqueIdentifier>{c1aa0d1f-d03d-4b61-8ac0-c73d90a46304}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\StartScene.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Condition.cpp">
       <Filter>StateMachine\CoreComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FloatCondition.cpp">
+      <Filter>StateMachine\Conditions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Condition.h">
       <Filter>StateMachine\CoreComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FloatCondition.h">
+      <Filter>StateMachine\Conditions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
