@@ -106,15 +106,6 @@ void PlayScene::start()
 
 
 
-	// create a dummy DecisionTree
-	decisionTree = new DecisionTree();
-	decisionTree->setAgent(m_pShip);
-	decisionTree->Display();
-
-	std::cout << "------------------------" << std::endl;
-	std::cout << decisionTree->MakeDecision() << std::endl;
-	std::cout << "------------------------\n" << std::endl;
-
 }
 
 void PlayScene::GUI_Function() 
