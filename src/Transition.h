@@ -8,7 +8,7 @@
 class Transition
 {
 public:
-	Transition(Condition* condition, State* target_state);
+	Transition(Condition* condition = nullptr, State* target_state);
 	virtual ~Transition();
 
 	//getter
@@ -16,9 +16,9 @@ public:
 	Condition* GetCondition() const;
 
 	//setter
+	void setCondition(Condition* condition);
 	void setTargetState(State* state);
 	void setIsTriggered(bool state);
-	void setCondition(Condition* condition);
 
 private:
 	Condition* m_condition;
